@@ -3,6 +3,14 @@
 <html lang="en">
 
 <head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128945209-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-128945209-1');
+    </script>
     <meta charset="utf-8">
 
     <title>Lifeless frontier</title>
@@ -23,14 +31,65 @@
         <div class="page__content">
             <article class="article">
                 <h2 class="article__heading">Hello world</h2>
-                <div class="article__date">3. 11. 2018</div>
+                <div class="article__date">8. 11. 2018</div>
                 <div class="article__content">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris et dolor in sem mollis gravida. Vestibulum metus dolor, viverra ut varius sit amet, sagittis ut justo. Morbi pretium commodo massa, non pellentesque ligula. Curabitur molestie egestas pretium. Fusce a neque at eros molestie suscipit eget eu quam. Cras egestas dignissim tempor. Pellentesque felis libero, lacinia eu rutrum ac, varius nec augue. Cras sed eleifend eros.</p>
-<p><img src="/public/3a00a9a32a8a09547942f6ed9d01beb8.PNG" alt="sample image"></p>
-<p>Duis finibus massa ut nibh tempus, nec iaculis lacus pretium. Duis et imperdiet lectus. Nulla ac ex quis libero pulvinar ornare. Nulla vel pulvinar lacus. Ut in suscipit orci, vitae placerat turpis. Integer quis facilisis ex, eget vulputate urna. Praesent sit amet sapien libero. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque nunc purus, euismod a ligula a, egestas vulputate diam. Donec consequat ipsum quis quam tempor sodales. Praesent dignissim orci rutrum laoreet auctor. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Sed diam dolor, imperdiet rutrum pulvinar vitae, dapibus nec est. Suspendisse eget lectus velit. Sed eget nibh nec mi volutpat tristique.</p>
-<p>Duis vitae facilisis ligula. Morbi ante arcu, maximus nec dui at, gravida dictum velit. Etiam at est eu ipsum luctus varius. Cras fringilla lobortis lorem at laoreet. Duis suscipit risus non odio dictum, fermentum tempus sem auctor. Maecenas consectetur orci risus, vitae vulputate massa fringilla eget. Donec non massa fermentum, pellentesque dolor non, consequat lectus. Pellentesque fringilla porta rutrum. Sed scelerisque, tellus nec pretium eleifend, nisi leo rhoncus nulla, sit amet vestibulum orci nulla quis lorem. Maecenas dapibus urna est, non laoreet nibh viverra sit amet. Duis accumsan porta mauris, nec mattis libero luctus sit amet. Pellentesque laoreet ante non neque maximus consequat eget nec dui. Pellentesque nulla mi, condimentum et mi eget, maximus lacinia augue.</p>
-<p>Sed molestie metus eu nisi tincidunt aliquet. Ut vitae lorem id arcu luctus pellentesque. Vestibulum in erat quis quam ultrices ultrices et eu nibh. Proin in sapien at nulla vehicula volutpat nec in metus. Aliquam dignissim, nibh non laoreet pulvinar, metus massa pretium lorem, nec tincidunt ipsum mi euismod ante. Nulla pretium urna id aliquam bibendum. Phasellus sollicitudin consectetur dui vitae sagittis. Mauris dictum nibh sem, vel efficitur arcu tincidunt sit amet. Donec nec rutrum orci, rutrum condimentum ligula. Nullam tempus eu augue nec maximus. Suspendisse eu aliquam tellus. Aenean et dictum urna, at venenatis libero. Nullam pellentesque dolor ut est maximus, vel malesuada est aliquam. Donec nec urna vel ex egestas interdum.</p>
-<p>Sed vehicula at turpis eu eleifend. Fusce a augue eget urna viverra feugiat et nec velit. Cras id eros ornare, pellentesque enim non, consequat augue. Suspendisse ullamcorper enim id feugiat sagittis. Cras ornare volutpat feugiat. Nam accumsan feugiat nibh, ac pellentesque neque sodales at. Donec ut vulputate magna. Nunc facilisis ut leo a commodo. Vivamus risus neque, lacinia et congue sit amet, gravida sed enim. Aliquam in bibendum metus, vel dignissim enim. Cras aliquam condimentum tortor, et congue ligula sodales a. Phasellus ut aliquet libero. Vivamus eu sem dignissim, volutpat sapien non, blandit elit. Ut posuere nisl viverra, facilisis augue vitae, tempus augue. Vivamus rhoncus vel risus quis maximus. Curabitur blandit quis lacus at malesuada.</p>
+                    <p>Two years ago I had a bright idea to write a video game. It wasn't my first. I've been getting these kinds of bright ideas once every couple of months. What makes this one so special is that it's the first idea that stuck with me for more than a week, significantly more.</p>
+<p>I decided it might be also a good idea to write a devlog. I do need to channel all my game thoughts somewhere and this seems to be like a good place to do it. This first part will be dedicated to an overview of the current state.</p>
+<p><em>Just a little disclaimer: game development isn't my full time job so everything I'm going to describe was done after working hours, during weekends, vacations etc.</em></p>
+<p>Since I'm more software developer than anything else, this whole thing will be more leaned towards software development details.</p>
+<h2>The Game</h2>
+<p><img src="/public/3a00a9a32a8a09547942f6ed9d01beb8.png" alt="Procedurally generated galaxy"></p>
+<p>Lifeless frontier is procedurally generated RPG/strategy game taking place in a distant future where humanity doesn't longer possess the need for their biological shells. Instead, they live in simulations powered by a huge swarm of computers or in solitude exploring the Milky way galaxy.</p>
+<p>The player will be one of these transcended individuals tasked to oversee construction of project called “space highways” which are lasers built in strategically selected solar systems powered by a local <a href="https://en.wikipedia.org/wiki/Dyson_sphere">Dyson swarm</a>. Thanks to <a href="https://en.wikipedia.org/wiki/Radiation_pressure">radiation pressure</a> these lasers are able to propel and slow down vessels traveling from one solar system to another.</p>
+<h3>Galaxy construction 101</h3>
+<p><img src="/public/00ebb381b69e251c78a0411221e6a293.jpg" alt="Procedurally generated solar system"></p>
+<p>Procedural generation is one of the key points in this game and there are several levels of it.</p>
+<p>Using theory called the <a href="https://en.wikipedia.org/wiki/Density_wave_theory">Density wave theory</a> the game places all the stars in a believable pattern. Then for each star the games selects appropriate mass which then reflects on how hot the star is which then determines its color and luminosity.</p>
+<p>Then the game picks a number of random stars and generates planets around those stars. Based on certain criteria and chance it can generate one of the following planet types:</p>
+<ul>
+<li>Gas giant,</li>
+<li>Asteroids (for an asteroid belt instead of planet)</li>
+<li>Rock</li>
+<li>Water</li>
+<li>Ice</li>
+<li>Terrestrial</li>
+<li>Venusian</li>
+<li>Martian</li>
+</ul>
+<p><img src="/public/50a74477bf0bd85da2515fc9d53fd1a1.jpg" alt="Generated map"></p>
+<p>Terrestrial planets are very special because they can be landed on. Every terrestrial planet has these following steps in order to generate it.</p>
+<ol>
+<li>Selecting random points on a sphere and using flood fill to determine lithosphere</li>
+<li>Selecting an ocean level</li>
+<li>Calculating temperature based on a distance from the equator</li>
+<li>Calculating precipitation, irrigation, humidity, permeability, ice caps and finally the appropriate biomes using <a href="https://en.wikipedia.org/wiki/Holdridge_life_zones">Holdridge life zones model</a>.</li>
+</ol>
+<p>This approach was heavily inspired by a library called <a href="https://github.com/Mindwerks/worldengine">WorldEngine</a></p>
+<p>Currently the game generates also landscape that can be traversed by the player but this system is subject to further development. As you can see, it looks quite ugly right now.</p>
+<p><img src="/public/d8671f1284a83c1fabc23e4cfb519405.jpg" alt="Generated map"></p>
+<h3>A ship adequate to the voyage</h3>
+<p>To traverse this vast space you need a ship and I always liked the idea of creating my own ship. That was in fact one of my key points when designing the game. Currently it features an editor where the player has an option to design a ship from scratch.</p>
+<p><img src="/public/8923031dd8d19995520f489ce502f5b6.jpg" alt="Interior editor"></p>
+<p>After placing interior the player can switch into exterior view and place weapons, propellers or other systems. Model of the ship is automatically generated from its designed layout. For this process I utilized slightly modified version of <a href="https://en.wikipedia.org/wiki/Marching_squares">marching squares</a> algorithm to get the layout boundaries.</p>
+<p>After getting the boundaries, a model is generated, UV unwrapped and cached for further use.</p>
+<p><img src="/public/f08e05b4b006006d828c21d9ba986e9b.jpg" alt="Interior editor"></p>
+<p>Every each component you put onto your ship has its own weight and other properties that influence how your ship is going to be fast or agile.</p>
+<p>The game AI can build their own ships as well based on a given parameters like firepower and acceleration the algorithm calculates how many guns, engines, reactors and of what kind are required to suffice this constrains. The algorithm used for this is the <a href="https://en.wikipedia.org/wiki/Simplex_algorithm">simplex algorithm</a>. Then a sprinkle of magic and a huge dose of guesswork is used to actually generate the ship's structure.</p>
+<p><img src="/public/5a45e6acd7907ee3b7866992e1894fb4.jpg" alt="Spaceship fights"></p>
+<p>On enemy encounter the player shall be moved to the battle view where (s)he assumes control over a number of spaceships inside the player's squad. Every battle can be paused and orders given at the player's own pace.</p>
+<h3>Blend with handcrafted content</h3>
+<p>Purely procedural content could be quite boring in this case so I'm trying to work on a system which could blend procedural and handcrafted content in connection to quests. This system is in very early stages.</p>
+<p><img src="/public/f86c44bc6ee64d58d62de83ab07205ea.jpg" alt="Spaceship fights"></p>
+<h2>The plan</h2>
+<p>So what's next? Above we've seen a lot of disconnected features. My next milestone is to connect them to a playable version containing the following functions.</p>
+<ul>
+<li>Procedural generation as it is right now</li>
+<li>Spaceship editor with resource consumption</li>
+<li>Fully fledged system for moving across the galaxy including fuel consumption</li>
+<li>Procedurally generated AI squads waiting in certain systems</li>
+<li>Battle system that's not that clunky as it is today.</li>
+<li>Single mission to get from point A to B</li>
+</ul>
 
                 </div>
             </article>
