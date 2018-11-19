@@ -1,0 +1,88 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128945209-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-128945209-1');
+    </script>
+    <meta charset="utf-8">
+
+    <title>Lifeless frontier</title>
+    <meta name="author" content="Marek Magdziak">
+    <link rel="stylesheet" href="/styles.css?v=1.0">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|Roboto" rel="stylesheet">
+</head>
+
+<body class="page">
+    <header class="page__header">
+        <h1 class="page__heading">
+            <span class="page__heading-major">Lifeless frontier</span>
+            <span class="page__heading-minor">Devlog</span>
+        </h1>
+        <p class="page__subheading">A game about exploration and conquest in far future</p>
+    </header>
+    <section class="page__body">
+        <div class="page__content">
+            <article class="article">
+                <h2 class="article__heading">New galaxy renderer</h2>
+                <div class="article__date">19. 11. 2018</div>
+                <div class="article__content">
+                    <p>One of the points I mentioned in the last entry was finishing up the system for traveling across the galaxy. While trying to design the system, I realized my current galaxy rendering technique isn't good enough anymore.</p>
+<p>The previous system was quite simple. Every generated star, hydrogen cloud or cloud of dust particles had a specific temperature. Based on that temperature and some tweaking the system picked a color and a proper sprite and rendered it into render texture which was used on a plane.
+This made however the galaxy seem very flat and the rendering wasn't efficient enough to animate the galaxy. Not mentioning the horrific pixelization while zooming in.</p>
+<p>So I embarked on a journey to create a better system.</p>
+<p>After a few failed attempts, where I tried to use Unity's instanced rendering to render 30 000 inverse cubes with particle shader, which bombed the performance quite a bit, I resorted to the holy grail of every development process: Google ... or rather DuckDuckGo.</p>
+<p>What I in the end found was <a href="https://github.com/Microsoft/GalaxyExplorer">Microsoft/GalaxyExplorer</a> repository containing a unity project for Microsoft HoloLens which lets you explore the Milky way galaxy. I encourage you to download it and try it out. It just looks amazing.</p>
+<p>What I wanted to find out is how they managed to render the galaxy with so much detail and even with option to zoom in a see the stars moving around.</p>
+<p><em>Screenshot from the Galaxy explorer.</em></p>
+<p><img src="/public/158bdf893b3a88e1e7499174c8bf51d1.jpg" alt="Galaxy explorer"></p>
+<h2>So how did they do it?</h2>
+<p>Located <a href="https://github.com/Microsoft/GalaxyExplorer/blob/master/Assets/Galaxy/DrawStars.cs">here</a> is a file containing the main rendering logic. The most interesting class is the <code>DrawStars</code> MonoBehaviour. In the game scene there are three instances of it.</p>
+<ul>
+<li>For rendering stars</li>
+<li>For rendering hydrogen clouds</li>
+<li>For rendering black spots for debris or other mess</li>
+</ul>
+<p>There are two modes in which the rendering process operates. It either renders into downscaled texture or not. The rendering into a downscaled texture is used for hydrogen clouds and those black spots.</p>
+<p>Let's start with the simplest one, rendering stars.</p>
+<p>Stars are rendered using the <code>Graphics.DrawProcedural</code> method located <a href="https://github.com/Microsoft/GalaxyExplorer/blob/master/Assets/Galaxy/DrawStars.cs#L247">here</a> and a shader located <a href="https://github.com/Microsoft/GalaxyExplorer/blob/master/Assets/Galaxy/SpiralStarsShader.shader">here</a>. The input is an array of <code>StarVertDescriptor</code> structs which contain color, size, uv (for selecting a sprite from spritesheet) and data required for calculating position, because they also calculate position in the vertex shader.</p>
+<p>Inside the <code>SpiralStarsShader</code> you can find a geometry shader which, based on the position data calculated in the vertex shader, creates a plane that is always rotated towards the main camera.</p>
+<p>Then the fragment shader calculates the appropriate color based on the input texture and color of an individual star.</p>
+<p>Clouds are rendered in a very similar way using a <code>SpiralStarsCloudShader</code> located <a href="https://github.com/Microsoft/GalaxyExplorer/blob/master/Assets/Galaxy/SpiralStarsCloudShader.shader">here</a> but instead of directly rendering it onto a screen, it renders it into a render texture.</p>
+<p>Before the rendering starts, a singleton of <code>RenderTexturesBucket</code> is created. This class instance contains three render textures with different resolutions from low to high.</p>
+<p>When rendering into a downscaled target, it first sets the target render texture to the low resolution render texture from the <code>RenderTexturesBucket</code> <a href="https://github.com/Microsoft/GalaxyExplorer/blob/master/Assets/Galaxy/DrawStars.cs#L179">here</a>. Then it goes through the same process as when rendering stars and renders the clouds with <code>Graphics.DrawProcedural</code> method. This time into a render texture. Then using <code>Graphics.Blit</code> method and bilinear filtering it upscales the texture with the first pass of the <code>ScreenComposeShader</code> located <a href="https://github.com/Microsoft/GalaxyExplorer/blob/master/Assets/Galaxy/ScreenComposeShader.shader">here</a> into the medium resolution render texture and finally, using the same approach, into the high resolution render texture. This approach saves performance and also doesn't produce artifacts, which would occur if they were using the low res texture for the final stage of rendering.</p>
+<p>Then finally they render a cube with the high res render texture projected onto the cube. This all happens in either the second or third pass of the <code>ScreenComposeShader</code>. The second pass is used for rendering in the game view or in the final build. The third pass is used for rendering in the scene view. This cube needs to be large enough to contain the entire galaxy. (Pretty large huh?)</p>
+<p>After a couple of days of tweaking and tinkering I was able to use the same approach in my ECS setup which produced the following results.</p>
+<p><img src="/public/e35edd3d0dc1207dbdddf395125e5878.jpg" alt="Galaxy from the top"></p>
+<p><img src="/public/83638cc512540dc1dc28a41c0a3a2cea.jpg" alt="Galaxy from the side"></p>
+<p><img src="/public/0a93ae8fb4ce0080c3fce501fe9f95e1.jpg" alt="Inside the galaxy"></p>
+<p>And a little twinkling for effect.</p>
+<video autoplay loop>
+  <source src="/public/0cb4f8a7161cd865054e343bb8c2f07d.mp4" type="video/mp4">
+</video>
+<p>In the end I kept all the color and position generating systems. The only thing I adopted is the above described rendering approach</p>
+<p>Next step is to actually do the travel system.</p>
+
+                </div>
+            </article>
+
+            <a href="/">🠸 Back to the front page</a>
+        </div>
+    </section>
+    <footer class="page__footer">
+        <a class="page__footer-icon" href="https://github.com/lifeless-frontier">
+            <img src="/public/GitHub.png" alt="We're on Github"/>
+        </a>
+        <a class="page__footer-icon" href="https://twitter.com/lifelessfronti1">
+            <img src="/public/Twitter.png" alt="We're on Github"/>
+        </a>
+    </footer>
+    <script src="/scripts.js"></script>
+</body>
+</html>
